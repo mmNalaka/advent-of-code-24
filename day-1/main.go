@@ -10,32 +10,16 @@ import (
 )
 
 // Read input file
-func readInputFile() []string {
+func readInputFile() (left []int, right []int) {
 	data, err := os.ReadFile("input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return strings.Split(string(data), "\n")
-}
+	lines := strings.Split(string(data), "\n")
 
-// Calculate the absolute value
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
-}
-
-// Part 1
-func part1() {
-	input := readInputFile()
-	var left []int
-	var right []int
-	var totalDistance int
-
-	// Loop through the input array split each line in to two seperatated by a empty space and create tow arrays
-	for _, v := range input {
+	// Loop through the lines array split each line in to two seperatated by a empty space and create tow arrays
+	for _, v := range lines {
 		// Split the line in to two
 		split := strings.Split(v, "   ")
 
@@ -52,6 +36,22 @@ func part1() {
 		}
 		right = append(right, rightInt)
 	}
+
+	return left, right
+}
+
+// Calculate the absolute value
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+// Part 1
+func part1() {
+	left, right := readInputFile()
+	var totalDistance int
 
 	// Sort the arrays
 	for i := 0; i < len(left); i++ {
@@ -76,9 +76,32 @@ func part1() {
 	}
 
 	// Print the total distance
-	println(totalDistance)
+	println("Part 1:", totalDistance)
+}
+
+// Part 2
+func part2() {
+	left, right := readInputFile()
+
+	// Loop thw left array and see how many times the number is in the right array
+	// Multiply the number from the left array by the number of times the number is in the right array
+	// Add the number to the total distance
+	var totalDistance int
+	for i := 0; i < len(left); i++ {
+		count := 0
+		for j := 0; j < len(right); j++ {
+			if left[i] == right[j] {
+				count++
+			}
+		}
+		totalDistance += left[i] * count
+	}
+
+	// Print the total distance
+	println("Part 2:", totalDistance)
 }
 
 func main() {
 	part1()
+	part2()
 }
