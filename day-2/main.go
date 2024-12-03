@@ -84,24 +84,29 @@ func part2() {
 	reports := readInputFile()
 	safeReports := 0
 
-	for _, report := range reports {
-		isSafe := false
-		// Remove one number from the at a time and see if the report is still safe
-		for i := 0; i < len(report); i++ {
-			newReport := make([]int, len(report)-1)
-			copy(newReport, report[:i])
-			copy(newReport[i:], report[i+1:])
-			if checkSafeReport(newReport) {
-				isSafe = true
-				break
+	// Check if the report is safe
+	if checkSafeReport(reports[0]) {
+		safeReports++
+	} else {
+
+		for _, report := range reports {
+			isSafe := false
+			// Remove one number from the at a time and see if the report is still safe
+			for i := 0; i < len(report); i++ {
+				newReport := make([]int, len(report)-1)
+				copy(newReport, report[:i])
+				copy(newReport[i:], report[i+1:])
+				if checkSafeReport(newReport) {
+					isSafe = true
+					break
+				}
+			}
+
+			if isSafe {
+				safeReports++
 			}
 		}
-
-		if isSafe {
-			safeReports++
-		}
 	}
-
 	println("Part 2:", safeReports)
 }
 
